@@ -1,0 +1,83 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    MyShelf | Profile
+{% endblock %}
+
+{% block content %}
+    <div class="container py-4">
+        <h2 class="mb-4">My Collection</h2>
+
+        <form method="get" class="mb-4 d-flex flex-wrap gap-2">
+            <select name="category" class="form-select w-auto">
+                <option value="all" {% if category == "all" %}selected{% endif %}>All Categories</option>
+                <option value="figure" {% if category == "figure" %}selected{% endif %}>Figures</option>
+                <option value="funko" {% if category == "funko" %}selected{% endif %}>Funkos</option>
+                <option value="book" {% if category == "book" %}selected{% endif %}>Books</option>
+            </select>
+
+            <select name="sort" class="form-select w-auto">
+                <option value="date_added" {% if sort == "date_added" %}selected{% endif %}>Newest</option>
+                <option value="oldest" {% if sort == "oldest" %}selected{% endif %}>Oldest</option>
+                <option value="alpha" {% if sort == "alpha" %}selected{% endif %}>A-Z</option>
+                <option value="noalpha" {% if sort == "noalpha" %}selected{% endif %}>Z-A</option>
+                <option value="category" {% if sort == "category" %}selected{% endif %}>Category</option>
+                <option value="series" {% if sort == "series" %}selected{% endif %}>Series</option>
+            </select>
+
+            <button type="submit" class="btn btn-dark">Apply</button>
+        </form>
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+            {% for item in items %}
+                <div class="col">
+                    <div class="card h-100">
+                        {% if item.google_id %}
+                            <img src="https://books.google.com/books/content?id={{ item.google_id }}&printsec=frontcover&img=1&zoom=1&source=gbs_api" class="card-img-top" alt="{{ item.title }}">
+                        {% else %}
+                            <img src="{{ url_for('static', filename='images/' ~ item.category ~ 's/' ~ item.image) }}" class="card-img-top" alt="{{ item.title }}">
+                        {% endif %}
+
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">{{ item.title }}</h5>
+                            {% if item.series %}
+                                <p class="card-text">Series: {{ item.series }}</p>
+                            {% endif %}
+                            {% if item.author %}
+                                <p class="card-text">Author: {{ item.author }}</p>
+                            {% endif %}
+                            <p class="card-text">Category: {{ item.category | capitalize }}</p>
+                            <p class="card-text">You own: {{ item.quantity }}</p>
+
+                            <form action="/add" method="post" class="mt-auto mb-2">
+                                {% if item.item_id %}
+                                    <input type="hidden" name="item_id" value="{{ item.item_id }}">
+                                {% else %}
+                                    <input type="hidden" name="google_id" value="{{ item.google_id }}">
+                                    <input type="hidden" name="title" value="{{ item.title }}">
+                                    <input type="hidden" name="author" value="{{ item.author }}">
+                                    <input type="hidden" name="image" value="{{ item.image }}">
+                                {% endif %}
+                                <input type="hidden" name="from_page" value="profile">
+                                <button type="submit" class="btn btn-dark w-100">Add Another</button>
+                            </form>
+
+                            <form action="/remove" method="post">
+                                {% if item.item_id %}
+                                    <input type="hidden" name="item_id" value="{{ item.item_id }}">
+                                {% else %}
+                                    <input type="hidden" name="google_id" value="{{ item.google_id }}">
+                                {% endif %}
+                                <button type="submit" class="btn btn-outline-danger w-100">Remove One</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        {% if items|length == 0 %}
+            <p class="mt-4">Your collection is empty. Start adding some items!</p>
+        {% endif %}
+    </div>
+{% endblock %}

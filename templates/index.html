@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    MyShelf | Home
+{% endblock %}
+
+{% block content %}
+    <div class="container py-4">
+        <div class="row g-4">
+
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card category-card h-100">
+                    <div class="ratio ratio-1x1">
+                        <img src="{{ url_for('static', filename='images/books.jpg') }}" class="card-img-top" alt="Books">
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">Books</h5>
+                        <a href="/books" class="btn btn-dark mt-auto">Open</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card category-card h-100">
+                    <div class="ratio ratio-1x1">
+                        <img src="{{ url_for('static', filename='images/figures.jpg') }}" class="card-img-top" alt="Figures">
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">Figures</h5>
+                        <a href="/figures" class="btn btn-dark mt-auto">Open</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card category-card h-100">
+                    <div class="ratio ratio-1x1">
+                        <img src="{{ url_for('static', filename='images/funkos.jpg') }}" class="card-img-top" alt="Funkos">
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">Funkos</h5>
+                        <a href="/funkos" class="btn btn-dark mt-auto">Open</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

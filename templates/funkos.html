@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    MyShelf | Funkos
+{% endblock %}
+
+{% block content %}
+    <div class="container py-4">
+        <h2 class="mb-4">Funkos Collection</h2>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+            {% for funko in funkos %}
+                <div class="col">
+                    <div class="card item-card h-100">
+                        <img src="{{ url_for('static', filename='images/funkos/' ~ funko['image']) }}" class="card-img-top" alt="{{ funko.name }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ funko.name }}</h5>
+                            <p class="card-text">Series: {{ funko.series }}</p>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <form action="/add" method="post">
+                                <input type="hidden" name="item_id" value="{{ funko.id }}">
+                                <input type="hidden" name="from_page" value="funkos">
+                                <button type="submit" class="btn btn-dark w-100">
+                                    Add to collection
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
